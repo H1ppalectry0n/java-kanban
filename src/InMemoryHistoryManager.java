@@ -1,23 +1,30 @@
 import tasks.Task;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final List<Task> history =  new ArrayList<>();
+    private final Map<Integer, Task> history = new LinkedHashMap<>();
 
     @Override
     public void add(Task task) {
-        if (history.size() >= 10) {
-            history.removeFirst();
+        // Исключение повторяюшихся элементов
+        if (history.containsKey(task.getId())) {
+            remove(task.getId());
         }
 
         // Копирование задачи в массив
-        history.add(new Task(task));
+        history.put(task.getId(), new Task(task));
     }
 
     @Override
     public ArrayList<Task> getHistory() {
-        return new ArrayList<>(history);
+        return new ArrayList<Task>(history.values());
+    }
+
+    @Override
+    public void remove(int id) {
+        history.remove(id);
     }
 }
