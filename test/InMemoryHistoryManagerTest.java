@@ -14,7 +14,7 @@ class InMemoryHistoryManagerTest {
         final Task task = new Task("Задача 1", "Описание 2", Status.NEW);
         historyManager.add(task);
 
-        task.setId(2);
+        task.setId(4);
 
         final ArrayList<Task> history = historyManager.getHistory();
 
