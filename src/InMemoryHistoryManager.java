@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    final private HashMap<Integer, Node> history = new HashMap<>();
+    private final HashMap<Integer, Node> history = new HashMap<>();
     private Node head = null;
     private Node tail = null;
 
