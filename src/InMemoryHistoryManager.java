@@ -1,23 +1,81 @@
 import tasks.Task;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final List<Task> history =  new ArrayList<>();
+
+    private final HashMap<Integer, Node> history = new HashMap<>();
+    private Node head = null;
+    private Node tail = null;
 
     @Override
     public void add(Task task) {
-        if (history.size() >= 10) {
-            history.removeFirst();
+        if (task == null) {
+            return;
         }
 
-        // Копирование задачи в массив
-        history.add(new Task(task));
+        remove(task.getId());
+        linkLast(task);
     }
+
+    public void linkLast(Task task) {
+        final Node oldTail = tail;
+        final Node node = new Node(oldTail, new Task(task), null);
+        tail = node;
+        history.put(task.getId(), node);
+        if (oldTail == null)
+            head = node;
+        else
+            oldTail.next = node;
+    }
+
 
     @Override
     public ArrayList<Task> getHistory() {
-        return new ArrayList<>(history);
+        return getTasks();
     }
+
+    public ArrayList<Task> getTasks() {
+        ArrayList<Task> tasks = new ArrayList<>();
+        Node currentNode = head;
+        while (!(currentNode == null)) {
+            tasks.add(currentNode.task);
+            currentNode = currentNode.next;
+        }
+        return tasks;
+    }
+
+
+    @Override
+    public void remove(int id) {
+        removeNode(history.get(id));
+    }
+
+    public void removeNode(Node node) {
+        if (node == null) {
+            return;
+        }
+
+        final Node next = node.next;
+        final Node prev = node.prev;
+
+        if (next != null) {
+            next.prev = prev;
+        }
+
+        if (prev != null) {
+            prev.next = next;
+        }
+
+        if (node == head) {
+            head = next;
+        }
+
+        if (node == tail) {
+            tail = prev;
+        }
+    }
+
 }
+

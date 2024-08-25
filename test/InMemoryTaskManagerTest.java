@@ -13,7 +13,7 @@ class InMemoryTaskManagerTest {
 
         // Добавляем эпик и подзадачу
         final Epic epic = new Epic("Эпик 1", "Описание 1");
-        final int epicId =  taskManager.addNewEpic(epic);
+        final int epicId = taskManager.addNewEpic(epic);
 
         final Subtask subtask1 = new Subtask("Сабтаск 1", "описание 2", Status.NEW, epicId);
         final int subtask1Id = taskManager.addNewSubtask(subtask1);
