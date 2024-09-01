@@ -15,7 +15,8 @@ class FileBackedTaskManagerTest {
         File file = Files.createTempFile("FileBackedTaskManagerTest", ".csv").toFile();
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
 
-        manager.save();
+        // т.к. save private  просто очищаем а там уже вызов сохранение
+        manager.deleteAllTasks();
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             assertEquals(br.readLine(), "id,type,name,status,description,epic");

@@ -1,19 +1,20 @@
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-import tasks.Tasks;
+import tasks.TaskUtil;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    final File file;
+    private final File file;
 
     public FileBackedTaskManager(File file) {
         this.file = file;
     }
 
-    static FileBackedTaskManager loadFromFile(File file) throws IOException {
+    public static FileBackedTaskManager loadFromFile(File file) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             FileBackedTaskManager manager = new FileBackedTaskManager(file);
 
@@ -24,12 +25,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             // Чтение заголовка
             br.readLine();
 
-            ArrayList<Task> tasks = new ArrayList<>();
-            ArrayList<Epic> epics = new ArrayList<>();
-            ArrayList<Subtask> subtasks = new ArrayList<>();
+            List<Task> tasks = new ArrayList<>();
+            List<Epic> epics = new ArrayList<>();
+            List<Subtask> subtasks = new ArrayList<>();
 
             while (br.ready()) {
-                Task task = Tasks.fromString(br.readLine());
+                Task task = TaskUtil.fromString(br.readLine());
                 switch (task.getType()) {
                     case EPIC -> {
                         epics.add((Epic) task);
@@ -54,25 +55,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    private void setEpics(ArrayList<Epic> newEpics) {
+    private void setEpics(List<Epic> newEpics) {
         for (Epic epic : newEpics) {
             this.epics.put(epic.getId(), epic);
         }
     }
 
-    private void setSubtasks(ArrayList<Subtask> newSubtasks) {
+    private void setSubtasks(List<Subtask> newSubtasks) {
         for (Subtask subtask : newSubtasks) {
             this.subtasks.put(subtask.getId(), subtask);
         }
     }
 
-    private void setTasks(ArrayList<Task> newTasks) {
+    private void setTasks(List<Task> newTasks) {
         for (Task task : newTasks) {
             this.tasks.put(task.getId(), task);
         }
     }
 
-    public void save() throws ManagerSaveException {
+    private void save() {
         try (Writer fileWriter = new FileWriter(file)) {
             fileWriter.write("id,type,name,status,description,epic\n");
 

@@ -1,7 +1,9 @@
 package tasks;
 
-public class Tasks {
-    public static Task fromString(final String value) {
+import java.io.IOException;
+
+public class TaskUtil {
+    public static Task fromString(final String value) throws IOException {
         String[] split = value.split(",");
         switch (TaskType.valueOf(split[1])) {
             case EPIC -> {
@@ -20,8 +22,9 @@ public class Tasks {
                 task.setId(Integer.parseInt(split[0]));
                 return task;
             }
+            default -> {
+                throw new IOException("Неверный формат записи.");
+            }
         }
-
-        return null;
     }
 }
