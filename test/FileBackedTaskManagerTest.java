@@ -6,6 +6,8 @@ import tasks.Task;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +21,7 @@ class FileBackedTaskManagerTest {
         manager.deleteAllTasks();
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            assertEquals(br.readLine(), "id,type,name,status,description,epic");
+            assertEquals(br.readLine(), "id,type,name,status,description,startTime,duration,epic");
 
             // Проверка, что в файле больше ничего нет
             assertFalse(br.ready());
@@ -41,8 +43,8 @@ class FileBackedTaskManagerTest {
         File file = Files.createTempFile("FileBackedTaskManagerTest", ".csv").toFile();
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
 
-        Task task1 = new Task("Задача 1", "Описание 1", Status.NEW);
-        Task task2 = new Task("Задача 2", "Описание 2", Status.DONE);
+        Task task1 = new Task("Задача 1", "Описание 1", Status.NEW, null, Duration.ZERO);
+        Task task2 = new Task("Задача 2", "Описание 2", Status.DONE, null, Duration.ZERO);
 
         manager.addNewTask(task1);
         manager.addNewTask(task2);
@@ -53,20 +55,20 @@ class FileBackedTaskManagerTest {
         int epicId = manager.addNewEpic(epic1);
         manager.addNewEpic(epic2);
 
-        Subtask subtask1 = new Subtask("Subtask 1", "Description 1", Status.DONE, epicId);
-        Subtask subtask2 = new Subtask("Subtask 2", "Description 2", Status.DONE, epicId);
+        Subtask subtask1 = new Subtask("Subtask 1", "Description 1", Status.DONE, null, Duration.ZERO, epicId);
+        Subtask subtask2 = new Subtask("Subtask 2", "Description 2", Status.DONE, null, Duration.ZERO, epicId);
 
         manager.addNewSubtask(subtask1);
         manager.addNewSubtask(subtask2);
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            assertEquals(br.readLine(), "id,type,name,status,description,epic");
-            assertEquals(br.readLine(), "0,TASK,Задача 1,NEW,Описание 1,");
-            assertEquals(br.readLine(), "1,TASK,Задача 2,DONE,Описание 2,");
-            assertEquals(br.readLine(), "2,EPIC,Эпик 1,DONE,Описание 1,");
-            assertEquals(br.readLine(), "3,EPIC,Эпик 2,NEW,Описание 2,");
-            assertEquals(br.readLine(), "4,SUBTASK,Subtask 1,DONE,Description 1,2");
-            assertEquals(br.readLine(), "5,SUBTASK,Subtask 2,DONE,Description 2,2");
+            assertEquals(br.readLine(), "id,type,name,status,description,startTime,duration,epic");
+            assertEquals(br.readLine(), "0,TASK,Задача 1,NEW,Описание 1,null,0,");
+            assertEquals(br.readLine(), "1,TASK,Задача 2,DONE,Описание 2,null,0,");
+            assertEquals(br.readLine(), "2,EPIC,Эпик 1,DONE,Описание 1,null,0,");
+            assertEquals(br.readLine(), "3,EPIC,Эпик 2,NEW,Описание 2,null,0,");
+            assertEquals(br.readLine(), "4,SUBTASK,Subtask 1,DONE,Description 1,null,0,2");
+            assertEquals(br.readLine(), "5,SUBTASK,Subtask 2,DONE,Description 2,null,0,2");
 
             // Проверка, что в файле больше ничего нет
             assertFalse(br.ready());
@@ -77,13 +79,13 @@ class FileBackedTaskManagerTest {
     public void loadTaskFromFile() throws IOException {
         File file = Files.createTempFile("FileBackedTaskManagerTest", ".csv").toFile();
         try (Writer fileWriter = new FileWriter(file)) {
-            fileWriter.write("id,type,name,status,description,epic\n");
-            fileWriter.write("0,TASK,Задача 1,NEW,Описание 1,\n");
-            fileWriter.write("1,TASK,Задача 2,DONE,Описание 2,\n");
-            fileWriter.write("2,EPIC,Эпик 1,DONE,Описание 1,\n");
-            fileWriter.write("3,EPIC,Эпик 2,NEW,Описание 2,\n");
-            fileWriter.write("4,SUBTASK,Subtask 1,DONE,Description 1,2\n");
-            fileWriter.write("5,SUBTASK,Subtask 2,DONE,Description 2,2\n");
+            fileWriter.write("id,type,name,status,description,startTime,duration,epic\n");
+            fileWriter.write("0,TASK,Задача 1,NEW,Описание 1,2024-09-10T13:32:32.662752400,30,\n");
+            fileWriter.write("1,TASK,Задача 2,NEW,Описание 2,2024-09-10T13:32:32.662752400,30,\n");
+            fileWriter.write("2,EPIC,Эпик 1,DONE,Описание 1,null,0,\n");
+            fileWriter.write("3,EPIC,Эпик 2,NEW,Описание 2,null,0,\n");
+            fileWriter.write("4,SUBTASK,Subtask 1,DONE,Description 1,2024-09-10T13:32:32.662752400,30,2\n");
+            fileWriter.write("5,SUBTASK,Subtask 2,DONE,Description 2,2024-09-10T13:32:32.662752400,30,2\n");
         }
 
         FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(file);
