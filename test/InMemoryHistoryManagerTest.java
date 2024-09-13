@@ -2,6 +2,8 @@ import org.junit.jupiter.api.Test;
 import tasks.Status;
 import tasks.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,7 +13,7 @@ class InMemoryHistoryManagerTest {
     @Test
     public void addedTasksNotChange() {
         final InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        final Task task = new Task("Задача 1", "Описание 2", Status.NEW);
+        final Task task = new Task("Задача 1", "Описание 2", Status.NEW, LocalDateTime.now(), Duration.ZERO);
         historyManager.add(task);
 
         task.setId(4);
@@ -25,7 +27,7 @@ class InMemoryHistoryManagerTest {
     public void deleteTaskFromHistory() {
         final InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
-        final Task task = new Task("Задача 1", "Описание 2", Status.NEW);
+        final Task task = new Task("Задача 1", "Описание 2", Status.NEW, LocalDateTime.now(), Duration.ZERO);
         historyManager.add(task);
 
         historyManager.remove(task.getId());
@@ -40,7 +42,7 @@ class InMemoryHistoryManagerTest {
         final InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
         for (int i = 0; i < 20; i++) {
-            final Task task = new Task("asdads", "dasdaad", Status.NEW);
+            final Task task = new Task("asdads", "dasdaad", Status.NEW, LocalDateTime.now(), Duration.ZERO);
             task.setId(i);
             historyManager.add(task);
         }
@@ -56,7 +58,7 @@ class InMemoryHistoryManagerTest {
 
         final ArrayList<Task> tasks = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            final Task task = new Task("asdads", "dasdaad", Status.NEW);
+            final Task task = new Task("asdads", "dasdaad", Status.NEW, LocalDateTime.now(), Duration.ZERO);
             task.setId(i);
             tasks.add(task);
             historyManager.add(task);
@@ -73,7 +75,7 @@ class InMemoryHistoryManagerTest {
 
         final ArrayList<Task> tasks = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            final Task task = new Task("asdads", "dasdaad", Status.NEW);
+            final Task task = new Task("asdads", "dasdaad", Status.NEW, LocalDateTime.now(), Duration.ZERO);
             task.setId(i);
             tasks.add(task);
         }
@@ -96,10 +98,10 @@ class InMemoryHistoryManagerTest {
     public void removeDuplicate() {
         final InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
-        final Task task1 = new Task("Задача 1", "Описание 1", Status.NEW);
+        final Task task1 = new Task("Задача 1", "Описание 1", Status.NEW, LocalDateTime.now(), Duration.ZERO);
         task1.setId(1);
         final Task task1d = new Task(task1);
-        final Task task2 = new Task("Задача 2", "Описание 2", Status.NEW);
+        final Task task2 = new Task("Задача 2", "Описание 2", Status.NEW, LocalDateTime.now(), Duration.ZERO);
         task2.setId(2);
         final Task task2d = new Task(task2);
 

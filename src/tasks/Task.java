@@ -1,6 +1,9 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Task {
     protected int id;
@@ -8,13 +11,17 @@ public class Task {
     protected String description;
     protected Status status;
     protected TaskType type;
+    protected LocalDateTime startTime;
+    protected Duration duration;
 
-    public Task(String name, String description, Status status) {
+    public Task(String name, String description, Status status, LocalDateTime startTime, Duration duration) {
         this.id = -1;
         this.name = name;
         this.description = description;
         this.status = status;
         this.type = TaskType.TASK;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     public Task(Task task) {
@@ -23,6 +30,8 @@ public class Task {
         this.description = task.description;
         this.status = task.status;
         this.type = TaskType.TASK;
+        this.startTime = task.startTime;
+        this.duration = task.duration;
     }
 
     public int getId() {
@@ -61,6 +70,30 @@ public class Task {
         return this.type;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public Optional<LocalDateTime> getStartTime() {
+        return Optional.ofNullable(startTime);
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public Optional<LocalDateTime> getEndTime() {
+        if (startTime == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(startTime.plus(duration));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,6 +109,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return String.join(",", Integer.toString(id), "TASK", name, status.toString(), description, "");
+        return String.join(",", Integer.toString(id), "TASK", name, status.toString(), description, startTime == null ? "null" : startTime.toString(), Long.toString(duration.toMinutes()), "");
     }
 }
