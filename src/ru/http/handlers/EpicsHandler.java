@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
-    final private TaskManager manager;
-    final private Gson gson;
+    private final TaskManager manager;
+    private final Gson gson;
 
     public EpicsHandler(final TaskManager manager, final Gson gson) {
         this.manager = manager;

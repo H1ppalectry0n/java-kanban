@@ -9,15 +9,14 @@ import ru.ManagerSaveException;
 import ru.TaskManager;
 import ru.http.ResponseErrorMessage;
 import ru.tasks.Subtask;
-import ru.tasks.Task;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
-    final private TaskManager manager;
-    final private Gson gson;
+    private final TaskManager manager;
+    private final Gson gson;
 
     public SubtasksHandler(final TaskManager manager, final Gson gson) {
         this.manager = manager;
