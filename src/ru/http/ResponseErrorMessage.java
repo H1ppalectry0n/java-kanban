@@ -1,12 +1,11 @@
 package ru.http;
 
 public class ResponseErrorMessage {
-    final Error error;
+    int code;
+    String message;
 
     public ResponseErrorMessage(final int code, final String message) {
-        error = new Error(code, message);
+        this.code = code;
+        this.message = message;
     }
-}
-
-record Error(int code, String message) {
 }
