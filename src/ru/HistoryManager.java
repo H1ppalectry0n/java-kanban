@@ -1,4 +1,6 @@
-import tasks.Task;
+package ru;
+
+import ru.tasks.Task;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
-import tasks.Status;
-import tasks.Task;
+import ru.InMemoryHistoryManager;
+import ru.tasks.Status;
+import ru.tasks.Task;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ class InMemoryHistoryManagerTest {
     public void addedTasksNotChange() {
         final InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
         final Task task = new Task("Задача 1", "Описание 2", Status.NEW, LocalDateTime.now(), Duration.ZERO);
+        task.setId(0);
         historyManager.add(task);
 
         task.setId(4);
@@ -28,6 +30,7 @@ class InMemoryHistoryManagerTest {
         final InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
         final Task task = new Task("Задача 1", "Описание 2", Status.NEW, LocalDateTime.now(), Duration.ZERO);
+        task.setId(0);
         historyManager.add(task);
 
         historyManager.remove(task.getId());

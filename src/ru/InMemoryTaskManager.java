@@ -1,7 +1,9 @@
-import tasks.Epic;
-import tasks.Status;
-import tasks.Subtask;
-import tasks.Task;
+package ru;
+
+import ru.tasks.Epic;
+import ru.tasks.Status;
+import ru.tasks.Subtask;
+import ru.tasks.Task;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -56,6 +58,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTasks() {
+        for (Task task : tasks.values()) {
+            prioritizedTasks.remove(task);
+        }
         tasks.clear();
     }
 
@@ -67,7 +72,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         final Epic epic = epics.get(epicId);
         for (Integer subtaskId : epic.getSubtaskIds()) {
-            subtasks.remove(subtaskId);
+            deleteSubtask(subtaskId);
         }
 
         epic.deleteSubtasks();
@@ -78,6 +83,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllSubtasks() {
+        for (Subtask subtask : subtasks.values()) {
+            prioritizedTasks.remove(subtask);
+        }
         subtasks.clear();
 
         for (Epic epic : epics.values()) {
@@ -243,7 +251,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTask(int taskId) {
-        tasks.remove(taskId);
+        Task task = tasks.get(taskId);
+        if (task != null) {
+            prioritizedTasks.remove(task);
+            tasks.remove(taskId);
+        }
     }
 
     @Override
@@ -253,6 +265,11 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         final Subtask subtask = subtasks.get(subtaskId);
+        if (subtask == null) {
+            return;
+        }
+
+        prioritizedTasks.remove(subtask);
         subtasks.remove(subtaskId);
 
         if (epics.containsKey(subtask.getEpicId())) {

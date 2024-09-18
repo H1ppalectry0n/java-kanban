@@ -1,7 +1,9 @@
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
-import tasks.TaskUtil;
+package ru;
+
+import ru.tasks.Epic;
+import ru.tasks.Subtask;
+import ru.tasks.Task;
+import ru.tasks.TaskUtil;
 
 import java.io.*;
 import java.util.ArrayList;

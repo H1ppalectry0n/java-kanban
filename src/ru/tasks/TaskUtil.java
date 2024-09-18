@@ -1,4 +1,4 @@
-package tasks;
+package ru.tasks;
 
 import java.io.IOException;
 import java.time.Duration;

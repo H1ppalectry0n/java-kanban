@@ -1,8 +1,10 @@
 import org.junit.jupiter.api.Test;
-import tasks.Epic;
-import tasks.Status;
-import tasks.Subtask;
-import tasks.Task;
+import ru.InMemoryTaskManager;
+import ru.ManagerOverlapException;
+import ru.tasks.Epic;
+import ru.tasks.Status;
+import ru.tasks.Subtask;
+import ru.tasks.Task;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

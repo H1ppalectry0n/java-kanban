@@ -1,7 +1,10 @@
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
+package ru;
 
+import ru.tasks.Epic;
+import ru.tasks.Subtask;
+import ru.tasks.Task;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
@@ -46,4 +49,6 @@ public interface TaskManager {
     void deleteEpic(int epicId);
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
 }
