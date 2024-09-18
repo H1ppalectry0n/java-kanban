@@ -2,12 +2,6 @@ package ru.http;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.time.Duration;
-import java.time.LocalDateTime;
-
 import com.sun.net.httpserver.HttpServer;
 import ru.Managers;
 import ru.TaskManager;
@@ -19,13 +13,27 @@ import ru.tasks.Status;
 import ru.tasks.Subtask;
 import ru.tasks.Task;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class HttpTaskServer {
-    final private static Gson GSON = new GsonBuilder()
+    private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())
             .create();
 
-    final private HttpServer server;
+    private final HttpServer server;
+
+    public HttpTaskServer(final TaskManager manager) throws IOException {
+        server = HttpServer.create(new InetSocketAddress(8080), 0);
+        server.createContext("/tasks", new TasksHandler(manager, GSON));
+        server.createContext("/subtasks", new SubtasksHandler(manager, GSON));
+        server.createContext("/epics", new EpicsHandler(manager, GSON));
+        server.createContext("/history", new HistoryHandler(manager, GSON));
+        server.createContext("/prioritized", new PrioritizedHandler(manager, GSON));
+    }
 
     public static void main(String[] args) throws IOException {
         TaskManager manager = Managers.getDefault();
@@ -45,15 +53,6 @@ public class HttpTaskServer {
 
         HttpTaskServer httpTaskServer = new HttpTaskServer(manager);
         httpTaskServer.start();
-    }
-
-    public HttpTaskServer(final TaskManager manager) throws IOException {
-        server = HttpServer.create(new InetSocketAddress(8080), 0);
-        server.createContext("/tasks", new TasksHandler(manager, GSON));
-        server.createContext("/subtasks", new SubtasksHandler(manager, GSON));
-        server.createContext("/epics", new EpicsHandler(manager, GSON));
-        server.createContext("/history", new HistoryHandler(manager, GSON));
-        server.createContext("/prioritized", new PrioritizedHandler(manager, GSON));
     }
 
     public static Gson getGson() {
