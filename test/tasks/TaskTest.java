@@ -1,6 +1,8 @@
 package tasks;
 
 import org.junit.jupiter.api.Test;
+import ru.tasks.Status;
+import ru.tasks.Task;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

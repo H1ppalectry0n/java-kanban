@@ -1,6 +1,7 @@
 package tasks;
 
 import org.junit.jupiter.api.Test;
+import ru.tasks.Epic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

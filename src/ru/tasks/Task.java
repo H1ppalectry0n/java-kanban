@@ -1,4 +1,4 @@
-package tasks;
+package ru.tasks;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class Task {
-    protected int id;
+    protected Integer id;
     protected String name;
     protected String description;
     protected Status status;
@@ -15,7 +15,7 @@ public class Task {
     protected Duration duration;
 
     public Task(String name, String description, Status status, LocalDateTime startTime, Duration duration) {
-        this.id = -1;
+        this.id = null;
         this.name = name;
         this.description = description;
         this.status = status;
@@ -34,7 +34,7 @@ public class Task {
         this.duration = task.duration;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

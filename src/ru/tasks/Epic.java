@@ -1,4 +1,4 @@
-package tasks;
+package ru.tasks;
 
 import java.time.Duration;
 import java.util.ArrayList;

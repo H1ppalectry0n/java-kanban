@@ -1,4 +1,4 @@
-package tasks;
+package ru.tasks;
 
 public enum Status {
     NEW,
