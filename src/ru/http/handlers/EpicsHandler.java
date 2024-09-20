@@ -3,7 +3,6 @@ package ru.http.handlers;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import ru.ManagerOverlapException;
 import ru.ManagerSaveException;
 import ru.TaskManager;
@@ -17,11 +16,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
+public class EpicsHandler extends BaseHttpHandler {
     private final TaskManager manager;
     private final Gson gson;
 
-    public EpicsHandler(final TaskManager manager, final Gson gson) {
+    public EpicsHandler(TaskManager manager, Gson gson) {
         this.manager = manager;
         this.gson = gson;
     }
@@ -56,7 +55,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    public void getRequest(HttpExchange exchange) throws IOException {
+    private void getRequest(HttpExchange exchange) throws IOException {
         String[] split = exchange.getRequestURI().getPath().split("/");
         if (split.length == 2) {
             sendEpics(exchange);
@@ -102,7 +101,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
         sendNotFound(exchange, message);
     }
 
-    public void postRequest(HttpExchange exchange) throws IOException {
+    private void postRequest(HttpExchange exchange) throws IOException {
         String s = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
 
         // класс для создания и изменения эпиков
@@ -126,7 +125,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    public void deleteRequest(HttpExchange exchange) throws IOException {
+    private void deleteRequest(HttpExchange exchange) throws IOException {
         String[] split = exchange.getRequestURI().getPath().split("/");
         if (split.length == 3) {
             final int epicId = Integer.parseInt(split[2]);

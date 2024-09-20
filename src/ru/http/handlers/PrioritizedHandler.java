@@ -3,7 +3,6 @@ package ru.http.handlers;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import ru.ManagerSaveException;
 import ru.TaskManager;
 import ru.http.ResponseErrorMessage;
@@ -12,15 +11,14 @@ import ru.tasks.Task;
 import java.io.IOException;
 import java.util.List;
 
-public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
+public class PrioritizedHandler extends BaseHttpHandler {
     private final TaskManager manager;
     private final Gson gson;
 
-    public PrioritizedHandler(final TaskManager manager, final Gson gson) {
+    public PrioritizedHandler(TaskManager manager, Gson gson) {
         this.manager = manager;
         this.gson = gson;
     }
-
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {

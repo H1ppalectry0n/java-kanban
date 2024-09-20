@@ -3,7 +3,6 @@ package ru.http.handlers;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import ru.ManagerOverlapException;
 import ru.ManagerSaveException;
 import ru.TaskManager;
@@ -14,11 +13,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class TasksHandler extends BaseHttpHandler implements HttpHandler {
+public class TasksHandler extends BaseHttpHandler {
     private final TaskManager manager;
     private final Gson gson;
 
-    public TasksHandler(final TaskManager manager, final Gson gson) {
+    public TasksHandler(TaskManager manager, Gson gson) {
         this.manager = manager;
         this.gson = gson;
     }
@@ -53,7 +52,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    public void getRequest(HttpExchange exchange) throws IOException {
+    private void getRequest(HttpExchange exchange) throws IOException {
         String[] split = exchange.getRequestURI().getPath().split("/");
         if (split.length == 2) {
             List<Task> tasks = manager.getTasks();
@@ -72,7 +71,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    public void postRequest(HttpExchange exchange) throws IOException {
+    private void postRequest(HttpExchange exchange) throws IOException {
         String s = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
         Task task = gson.fromJson(s, Task.class);
         try {
@@ -89,7 +88,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    public void deleteRequest(HttpExchange exchange) throws IOException {
+    private void deleteRequest(HttpExchange exchange) throws IOException {
         String[] split = exchange.getRequestURI().getPath().split("/");
         if (split.length == 3) {
             final int taskId = Integer.parseInt(split[2]);
